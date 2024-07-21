@@ -1,13 +1,19 @@
 import re
 def normalize_phone(phone_number):
+    # видалення всіх символів, крім цифр та "+"
     cleaned_number = re.sub(r'[^\d+]', '', phone_number.strip())
+    
+    # перевіряємо наявність міжнародного коду 
     if cleaned_number.startswith('+'):
         if cleaned_number.startswith('+380'):
             return cleaned_number
+    # має "+" але не має міжнародного коду, повертаємо '+38'
         else:
             return '+38' + cleaned_number.lstrip('+')
+     # номер без "+", але з кодом України, повертаємо "+"   
     elif cleaned_number.startswith('380'):
-            return '+' + cleaned_number    
+            return '+' + cleaned_number   
+    # номер без міжнародного коду, повертаємо '+38'
     else:
          return '+38' + cleaned_number        
 
@@ -22,5 +28,6 @@ raw_numbers = [
     "38050-111-22-22",
     "38050 111 22 11   ",
 ]
+# задаємо змінну num яка представляє кожен елемент у raw_numbers і використовуємо цикл
 sanitized_numbers = [normalize_phone(num) for num in raw_numbers]
 print(sanitized_numbers)
